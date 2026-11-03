@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مُحَاسَبَة — إكمال تسجيل الدخول</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1a2e1a;color:#f5f0e8;font-family:Arial,Tahoma,sans-serif;padding:20px;box-sizing:border-box}
+  .card{max-width:420px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.25);border-radius:18px;padding:26px;text-align:center}
+  h1{margin:0 0 6px;color:#e8c97a;font-size:34px}
+  p{line-height:1.8;color:rgba(245,240,232,.75);margin:10px 0}
+  .btn{display:block;background:#5a9e5a;color:#fff;text-decoration:none;padding:14px;border-radius:12px;font-weight:bold;font-size:16px;margin:18px 0 10px}
+  button{background:transparent;border:1px solid rgba(201,168,76,.5);color:#e8c97a;border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer}
+  textarea{width:100%;box-sizing:border-box;height:70px;margin-top:10px;background:rgba(0,0,0,.25);color:#f5f0e8;border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:11px;direction:ltr}
+  .small{font-size:12px;color:rgba(245,240,232,.5)}
+  #desk{display:none;color:#e8c97a}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>مُحَاسَبَة</h1>
+  <p id="msg">جارٍ فتح التطبيق لإكمال تسجيل الدخول…</p>
+  <p id="desk">افتح رابط الإيميل من نفس الموبايل اللي عليه تطبيق مُحَاسَبَة.</p>
+  <a id="open" class="btn" href="#">فتح التطبيق وإكمال الدخول</a>
+  <p class="small">لو التطبيق ما اتفتحش، اضغط الزرار فوق تاني. ولو لسه، انسخ رابط الدخول:</p>
+  <button id="copy" type="button">نسخ رابط الدخول</button>
+  <textarea id="link" readonly></textarea>
+</div>
+<script>
+  // رابط الدخول الكامل (فيه oobCode) هو عنوان الصفحة دي بعد ما Firebase يحوّل عليها
+  var link = window.location.href;
+  var appUrl = 'muhassaba://signin?link=' + encodeURIComponent(link);
+  document.getElementById('open').href = appUrl;
+  document.getElementById('link').value = link;
+  if (!/android/i.test(navigator.userAgent)) {
+    document.getElementById('desk').style.display = 'block';
+  } else {
+    setTimeout(function () { window.location.href = appUrl; }, 400);
+  }
+  document.getElementById('copy').onclick = function () {
+    var t = document.getElementById('link');
+    t.select();
+    try { navigator.clipboard.writeText(link); } catch (e) { document.execCommand('copy'); }
+    this.textContent = 'تم النسخ ✓';
+  };
+</script>
+</body>
+</html>
